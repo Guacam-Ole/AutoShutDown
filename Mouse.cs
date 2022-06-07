@@ -47,6 +47,7 @@ namespace AutoShutDown
         {
             var currentMousePosition = GetCurrentMousePosition();
             _mouseIdleCount = currentMousePosition == _lastMousePosition ? _mouseIdleCount + 1 : 0;
+            _lastMousePosition = currentMousePosition;
             if (Settings.ConsoleLog) Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Cursor:{currentMousePosition} IdleCount:{_mouseIdleCount}");
             return _mouseIdleCount >= 2;
         }
