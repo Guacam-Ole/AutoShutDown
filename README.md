@@ -18,7 +18,7 @@ Configuration is done by StartupParameters:
 
 ### Examples:
 
-`autoshutdown /mouse=10`  - Shutdown if mouse haven't been moved for 10 minutes
+`autoshutdown /mouse=10`  - Shutdown if mouse hasn't been moved for 10 minutes
 
 `autoshutdown /down=5MB`  - Shutdown id downloadspeed drops below 5 MB per second
 
@@ -29,10 +29,6 @@ Configuration is done by StartupParameters:
 `autoshutdown /mouse=3 /comand=notepad /params=this is a dummy.txt` - Open 'this is a dummy.txt' with notepad after 3 minutes without mousemovements
 
 If you combine `/mouse` and `/down` autoshutdown _first_ waits for mousemovements to stop and _after that_ checks if downloads are below the threshold
-
-
-
-This is meant to be lightwight. So if you for example add a word where a number is expected you will receive a fancy exception instead. 
 
 
 
