@@ -9,7 +9,7 @@ namespace AutoShutDown
             if (settings.Beep)
             {
                 Console.Beep(3000, 500);
-                if (settings.ConsoleLog) Console.WriteLine("beep");
+                if (settings.ConsoleLog) Log("beep");
                 return;
             }
 
@@ -17,9 +17,14 @@ namespace AutoShutDown
             Console.WriteLine($"Would call '{settings.ExecuteCommand} {settings.ExecuteParameters}' on Release");
 #else
             Process.Start(settings.ExecuteCommand, settings.ExecuteParameters);
-            if (settings.ConsoleLog) Console.WriteLine("Executing command, exiting program");
+            if (settings.ConsoleLog) Log("Executed command, exiting program");
 #endif
             Environment.Exit(0);
+        }
+
+        public static void Log(string contents)
+        {
+            Console.WriteLine($"[{DateTime.Now}] {contents}");
         }
     }
 }

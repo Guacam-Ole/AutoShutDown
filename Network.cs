@@ -32,7 +32,7 @@ namespace AutoShutDown
 
             long newBytesReceiveTotald = GetReceivedBytesFromAllInterfaces();
             var avgDiffPerSecond = (newBytesReceiveTotald - _bytesReceivedTotal) / 60;
-            if (Settings.ConsoleLog) Console.WriteLine($"[{DateTime.Now.ToShortTimeString()}] Avg. Rate/s over 60s: {avgDiffPerSecond.Fancy()}");
+            if (Settings.ConsoleLog) Execute.Log($"Avg./s over 60s: {avgDiffPerSecond.Fancy()}");
             _bytesReceivedTotal = newBytesReceiveTotald;
             if (avgDiffPerSecond< Settings.MinBytesReceived) Execute.RunCommand(Settings);
         }

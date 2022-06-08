@@ -48,7 +48,8 @@
                 }
             }
 
-            Console.WriteLine($"Autoshutdown started. [Mousemove: {MouseMoveMinutes} minutes | Downloadlimit: {MinBytesReceived.Fancy()} | beep: {Beep} | command:'{ExecuteCommand}' | parameters: '{ExecuteParameters}' processes:'{string.Join(",", LongRunningProcesses)}'");
+            Execute.Log($"Autoshutdown started.");
+            Execute.Log($"[Mousemove: {MouseMoveMinutes} minutes | Downloadlimit: {MinBytesReceived.Fancy()} | beep: {Beep} | command:'{ExecuteCommand}' | parameters: '{ExecuteParameters}' | processes:'{string.Join(",", LongRunningProcesses)}']");
             if (MouseMoveMinutes + MinBytesReceived <= 0) throw new Exception("/mouse or /down must be provided");
         }
 
@@ -59,8 +60,8 @@
 
         private void ShowParameterInfo()
         {
-            Console.WriteLine("autoshutdown /mouse=[time] /down=[minspeed] /processes=[process1,process2] /command=[beep|(command)] /params=[parameters]");
-            Console.WriteLine($"see {_githubUrl} for detailed help");
+            Execute.Log("autoshutdown /mouse=[time] /down=[minspeed] /processes=[process1,process2] /command=[beep|(command)] /params=[parameters]");
+            Execute.Log($"see '{_githubUrl}' for detailed help");
             Environment.Exit(0);
         }
     }
