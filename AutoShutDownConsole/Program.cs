@@ -37,7 +37,7 @@ namespace AutoShutDown.Console
 
         private static void WatchDog_WarningEvent(object? sender, EventArgs e)
         {
-            Execute.RunCommand("START CMD /C \\\"ECHO Will Shutdown soon && PAUSE\\\"");
+            Log.Warning("Will Shutdown soon");
         }
     }
 }

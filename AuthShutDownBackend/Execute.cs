@@ -7,10 +7,10 @@ namespace AutoShutDown.Backend
     public static class Execute
     {
 
-        public static void RunCommand(string command)
+        public static void RunCommand(string command, string parameters)
         {
-
-
+            Process.Start(command, parameters);
+            Log.Debug($"Executed {command} {parameters}");
         }
         public static void RunCommand(Settings settings)
         {
@@ -24,8 +24,7 @@ namespace AutoShutDown.Backend
 #if DEBUG
             Console.WriteLine($"Would call '{settings.ExecuteCommand} {settings.ExecuteParameters}' on Release");
 #else
-            Process.Start(settings.ExecuteCommand, settings.ExecuteParameters);
-            if (settings.ConsoleLog) Log($"Executed {settings.ExecuteCommand} {settings.ExecuteParameters}");
+            RunCommand(settings.ExecuteCommand, settings.ExecuteParameters);
 #endif
             Environment.Exit(0);
         }
