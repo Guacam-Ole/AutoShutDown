@@ -1,4 +1,4 @@
-﻿namespace AutoShutDownUI
+﻿namespace AutoShutDown.UI
 {
     partial class Settings
     {
@@ -110,6 +110,7 @@
             // DownloadRate
             // 
             DownloadRate.Location = new Point(147, 70);
+            DownloadRate.Maximum = new decimal(new int[] { 10000000, 0, 0, 0 });
             DownloadRate.Name = "DownloadRate";
             DownloadRate.Size = new Size(87, 23);
             DownloadRate.TabIndex = 7;
@@ -117,12 +118,14 @@
             // 
             // DownloadMultiplyer
             // 
+            DownloadMultiplyer.DisplayMember = "Text";
             DownloadMultiplyer.DropDownStyle = ComboBoxStyle.DropDownList;
             DownloadMultiplyer.FormattingEnabled = true;
             DownloadMultiplyer.Location = new Point(240, 69);
             DownloadMultiplyer.Name = "DownloadMultiplyer";
             DownloadMultiplyer.Size = new Size(121, 23);
             DownloadMultiplyer.TabIndex = 8;
+            DownloadMultiplyer.ValueMember = "Value";
             // 
             // MinutesLabel
             // 
@@ -148,12 +151,11 @@
             Notifyer.Text = "Notifyer";
             Notifyer.Visible = true;
             // 
-            // WarningMinutes
+            // WarningSeconds
             // 
             WarningSeconds.Location = new Point(147, 137);
             WarningSeconds.Maximum = new decimal(new int[] { 1440, 0, 0, 0 });
-            WarningSeconds.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            WarningSeconds.Name = "WarningMinutes";
+            WarningSeconds.Name = "WarningSeconds";
             WarningSeconds.Size = new Size(87, 23);
             WarningSeconds.TabIndex = 14;
             Hint.SetToolTip(WarningSeconds, "Show a warning that the system is going to shut down. Set to 0 to disable this");

@@ -1,4 +1,4 @@
-namespace AutoShutDownUI
+namespace AutoShutDown.UI
 {
     internal static class Program
     {
@@ -11,7 +11,7 @@ namespace AutoShutDownUI
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Settings());
+            Application.Run(new BackgroundContext());
         }
     }
 }

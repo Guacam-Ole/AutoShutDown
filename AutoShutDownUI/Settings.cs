@@ -2,7 +2,7 @@
 
 using Newtonsoft.Json;
 
-namespace AutoShutDownUI
+namespace AutoShutDown.UI
 {
     public partial class Settings : Form
     {
@@ -35,12 +35,12 @@ namespace AutoShutDownUI
             WarningSeconds.Value = settings.WarningSecondsBeforeShutdown;
             var multiIndex = 0;
             var bytes = settings.MinBytesReceived;
-            if (bytes > 1024)
+            if (bytes >= 1024)
             {
                 multiIndex = 1;
                 bytes = bytes / 1024;
             }
-            if (bytes > 1024)
+            if (bytes >= 1024)
             {
                 multiIndex = 2;
                 bytes = bytes / 1024;
@@ -59,15 +59,20 @@ namespace AutoShutDownUI
             int multiplicator = ((MultiPlyer)DownloadMultiplyer.SelectedItem).Value;
             settings.MinBytesReceived = multiplicator * (int)DownloadRate.Value;
             var processList = TasksList.Text.Split(' ');
-            var command=ShutdownCommand.Text.Trim();
-            if (command.Contains(' '))
+            
+            var command = ShutdownCommand.Text.Trim();
+            if (!string.IsNullOrWhiteSpace(command))
             {
-                settings.ExecuteCommand=command[..command.IndexOf(" ")];
-                settings.ExecuteParameters = command[command.IndexOf(" ")..].Trim();
-            } else
-            {
-                settings.ExecuteCommand= command;
-                settings.ExecuteParameters = string.Empty;
+                if (command.Contains(' '))
+                {
+                    settings.ExecuteCommand = command[..command.IndexOf(" ")];
+                    settings.ExecuteParameters = command[command.IndexOf(" ")..].Trim();
+                }
+                else
+                {
+                    settings.ExecuteCommand = command;
+                    settings.ExecuteParameters = string.Empty;
+                }
             }
             if (processList.Length > 0)
             {
@@ -90,6 +95,7 @@ namespace AutoShutDownUI
         private void SaveButton_Click(object sender, EventArgs e)
         {
             WriteSettings();
+            this.Close();
         }
     }
 }

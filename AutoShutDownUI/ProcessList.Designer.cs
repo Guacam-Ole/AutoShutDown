@@ -52,6 +52,7 @@
             FormBorderStyle = FormBorderStyle.SizableToolWindow;
             MinimizeBox = false;
             Name = "ProcessList";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "List of currently running processes. Doubleclick to add";
             Load += ProcessList_Load;
             ResumeLayout(false);
