@@ -17,7 +17,7 @@ namespace AutoShutDown.Console
                 Log.Logger = new LoggerConfiguration()
                     .MinimumLevel.Debug()
                     .WriteTo.Console(Serilog.Events.LogEventLevel.Debug)
-                    .WriteTo.File("autoshutdown.log", Serilog.Events.LogEventLevel.Information)
+                    .WriteTo.File("autoshutdown.log", Serilog.Events.LogEventLevel.Debug)
                     .CreateLogger();
 
                 var settings = Parser.GetSettingsByArgs(args);

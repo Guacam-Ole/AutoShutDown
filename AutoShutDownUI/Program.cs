@@ -1,3 +1,5 @@
+using Serilog;
+
 namespace AutoShutDown.UI
 {
     internal static class Program
@@ -8,10 +10,18 @@ namespace AutoShutDown.UI
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            Log.Logger = new LoggerConfiguration()
+                  .MinimumLevel.Debug()
+                  .WriteTo.Console(Serilog.Events.LogEventLevel.Debug)
+                  .WriteTo.File("autoshutdown.log", Serilog.Events.LogEventLevel.Debug)
+                  .CreateLogger();
+
+
             ApplicationConfiguration.Initialize();
             Application.Run(new BackgroundContext());
         }
+
+
+
     }
 }
