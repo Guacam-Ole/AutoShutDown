@@ -58,7 +58,7 @@ namespace AutoShutDown.UI
             settings.WarningSecondsBeforeShutdown = (int)WarningSeconds.Value;
             int multiplicator = ((MultiPlyer)DownloadMultiplyer.SelectedItem).Value;
             settings.MinBytesReceived = multiplicator * (int)DownloadRate.Value;
-            var processList = TasksList.Text.Split(' ');
+            var processList = TasksList.Text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             
             var command = ShutdownCommand.Text.Trim();
             if (!string.IsNullOrWhiteSpace(command))
