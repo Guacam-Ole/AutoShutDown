@@ -41,10 +41,10 @@
             SaveButton = new Button();
             Notifyer = new NotifyIcon(components);
             Hint = new ToolTip(components);
-            WarningMinutesLabel = new Label();
             WarningMinutes = new NumericUpDown();
-            label2 = new Label();
             ShutdownCommand = new TextBox();
+            WarningMinutesLabel = new Label();
+            label2 = new Label();
             label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)MouseMinuteSelect).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DownloadRate).BeginInit();
@@ -147,15 +147,6 @@
             Notifyer.Text = "Notifyer";
             Notifyer.Visible = true;
             // 
-            // WarningMinutesLabel
-            // 
-            WarningMinutesLabel.AutoSize = true;
-            WarningMinutesLabel.Location = new Point(240, 139);
-            WarningMinutesLabel.Name = "WarningMinutesLabel";
-            WarningMinutesLabel.Size = new Size(50, 15);
-            WarningMinutesLabel.TabIndex = 15;
-            WarningMinutesLabel.Text = "Minutes";
-            // 
             // WarningMinutes
             // 
             WarningMinutes.Location = new Point(147, 137);
@@ -167,6 +158,23 @@
             Hint.SetToolTip(WarningMinutes, "Show a warning that the system is going to shut down. Set to 0 to disable this");
             WarningMinutes.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
+            // ShutdownCommand
+            // 
+            ShutdownCommand.Location = new Point(147, 166);
+            ShutdownCommand.Name = "ShutdownCommand";
+            ShutdownCommand.Size = new Size(577, 23);
+            ShutdownCommand.TabIndex = 17;
+            Hint.SetToolTip(ShutdownCommand, "Command to run. Empty to switch back to default");
+            // 
+            // WarningMinutesLabel
+            // 
+            WarningMinutesLabel.AutoSize = true;
+            WarningMinutesLabel.Location = new Point(240, 139);
+            WarningMinutesLabel.Name = "WarningMinutesLabel";
+            WarningMinutesLabel.Size = new Size(51, 15);
+            WarningMinutesLabel.TabIndex = 15;
+            WarningMinutesLabel.Text = "Seconds";
+            // 
             // label2
             // 
             label2.AutoSize = true;
@@ -175,14 +183,6 @@
             label2.Size = new Size(76, 15);
             label2.TabIndex = 16;
             label2.Text = "Warningtime";
-            // 
-            // ShutdownCommand
-            // 
-            ShutdownCommand.Location = new Point(147, 166);
-            ShutdownCommand.Name = "ShutdownCommand";
-            ShutdownCommand.Size = new Size(577, 23);
-            ShutdownCommand.TabIndex = 17;
-            Hint.SetToolTip(ShutdownCommand, "Command to run. Empty to switch back to default");
             // 
             // label1
             // 

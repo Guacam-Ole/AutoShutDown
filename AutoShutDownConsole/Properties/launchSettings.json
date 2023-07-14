@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AutoShutDown.Console": {
+      "commandName": "Project",
+      "commandLineArgs": "/mouse=2 /command=beep /processes=KeePassXC"
+    }
+  }
+}

@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using Serilog;
+
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace AutoShutDown.Backend
@@ -8,20 +10,23 @@ namespace AutoShutDown.Backend
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(ref Point lpPoint);
 
-        private readonly Network _network;
-        private int _mouseIdleCount = 0;
         private Point _lastMousePosition;
+        private DateTime _lastMouseMovement;
+        private readonly Settings _settings;
 
-        public Mouse(Settings settings, Network network) : base(settings)
+        public override bool ConditionsMet
         {
-            _network = network;
+            get
+            {
+                return _lastMouseMovement.AddMinutes(_settings.MouseMoveMinutes) < DateTime.Now;
+            }
         }
 
-        public override void Init()
+        public Mouse(Settings settings)
         {
-            Execute.Log("Init Mouse");
-            TriggerTimer = new Timer(TimerExpired, null, Settings.MouseMoveMinutes * 30000, Settings.MouseMoveMinutes * 30000);
-            var minuteTimer = new Timer(MinuteTimerExpired, null, TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(10));
+            var minuteTimer = new Timer(MinuteTimerExpired, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+            _lastMouseMovement = DateTime.Now;
+            _settings = settings;
         }
 
         private void MinuteTimerExpired(object? state)
@@ -29,43 +34,10 @@ namespace AutoShutDown.Backend
             var currentMousePosition = GetCurrentMousePosition();
             if (currentMousePosition != _lastMousePosition)
             {
-                _mouseIdleCount = 0;
+                _lastMouseMovement = DateTime.Now;
             }
-            if (Settings.ConsoleLog) Execute.Log($"10min Cursor:{currentMousePosition} IdleCount:{_mouseIdleCount}");
-        }
-
-        public override void TimerExpired(object? state)
-        {
-            if (LongRunningProcessesFound())
-            {
-                Execute.Log("Long running process found");
-                return;
-            }
-            if (!MouseStuck())
-            {
-                Execute.Log("Mouse did move");
-                return;
-            }
-            TriggerTimer.Change(-1, -1);    // disable timer
-
-            Execute.Log("No Mousemovement detected");
-            if (Settings.MinBytesReceived > 0)
-            {
-                _network.Init();
-            }
-            else
-            {
-                Execute.RunCommand(Settings);
-            }
-        }
-
-        private bool MouseStuck()
-        {
-            var currentMousePosition = GetCurrentMousePosition();
-            _mouseIdleCount = currentMousePosition == _lastMousePosition ? _mouseIdleCount + 1 : 0;
             _lastMousePosition = currentMousePosition;
-            if (Settings.ConsoleLog) Execute.Log($"Cursor:{currentMousePosition} IdleCount:{_mouseIdleCount}");
-            return _mouseIdleCount >= 2;
+            Log.Debug(($"1min Cursor:{currentMousePosition} Last movement:{_lastMouseMovement}"));
         }
 
         private static Point GetCurrentMousePosition()

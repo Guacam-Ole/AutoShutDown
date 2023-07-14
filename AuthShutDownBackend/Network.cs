@@ -1,41 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Serilog;
+
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoShutDown.Backend
 {
     public class Network : Trigger
     {
         private long _bytesReceivedTotal = 0;
-        public Network(Settings settings) : base(settings)
+        private long _avgDiffPerSecond = long.MaxValue; 
+        private readonly Settings _settings;
+
+        public override bool ConditionsMet
         {
+            get { return _avgDiffPerSecond < _settings.MinBytesReceived; }
         }
 
-        public override void Init()
-        {
-            Execute.Log("Init Network");
-            StartDownloadTrigger();
-        }
-
-
-        private void StartDownloadTrigger()
+        public Network(Settings settings)
         {
             _bytesReceivedTotal = GetReceivedBytesFromAllInterfaces();
-            TriggerTimer = new Timer(TimerExpired, null, 60000, 60000);
+            _ = new Timer(MinuteDownloadCount, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+            _settings = settings;
         }
 
-        public override void TimerExpired(object? state)
+        public void MinuteDownloadCount(object? state)
         {
-            if (LongRunningProcessesFound()) return;
-
             long newBytesReceiveTotald = GetReceivedBytesFromAllInterfaces();
-            var avgDiffPerSecond = (newBytesReceiveTotald - _bytesReceivedTotal) / 60;
-            if (Settings.ConsoleLog) Execute.Log($"Avg./s over 60s: {avgDiffPerSecond.Fancy()}");
+            _avgDiffPerSecond = (newBytesReceiveTotald - _bytesReceivedTotal) / 60;
+            Log.Debug($"Avg./s over 60s: {_avgDiffPerSecond.Fancy()}");
             _bytesReceivedTotal = newBytesReceiveTotald;
-            if (avgDiffPerSecond< Settings.MinBytesReceived) Execute.RunCommand(Settings);
         }
 
         private static long GetReceivedBytesFromAllInterfaces()

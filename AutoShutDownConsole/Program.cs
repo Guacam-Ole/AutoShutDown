@@ -1,33 +1,43 @@
-﻿using AutoShutDown.Backend;
+﻿using AuthShutDown.Backend;
+
+using AutoShutDown.Backend;
+
+using Newtonsoft.Json;
+
+using Serilog;
 
 namespace AutoShutDown.Console
 {
     public class Program
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             try
             {
-                Execute.Log("Started");
-                var settings = new Settings(args);
-                var network = new Network(settings);
-                var mouse = new Mouse(settings, network);
+                Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Debug()
+                    .WriteTo.Console(Serilog.Events.LogEventLevel.Debug)
+                    .WriteTo.File("autoshutdown.log", Serilog.Events.LogEventLevel.Information)
+                    .CreateLogger();
 
-                if (settings.MouseMoveMinutes > 0)
-                {
-                    mouse.Init();
-                }
-                else
-                {
-                    network.Init();
-                }
-
-                while (true) Thread.Sleep(1000);
+                var settings = Parser.GetSettingsByArgs(args);
+         
+                if (settings == null) return;
+                var watchDog = new WatchDog(settings);
+                watchDog.WarningEvent += WatchDog_WarningEvent;
+                Log.Information("Autoshutdown Console started");
+                watchDog.RunWatchDog().Wait();
+                Log.Information("Autoshutdown Console stopped");
             }
             catch (Exception ex)
             {
-                Execute.Log(ex.ToString());
+                Log.Error(ex, "error in console application");
             }
+        }
+
+        private static void WatchDog_WarningEvent(object? sender, EventArgs e)
+        {
+            Execute.RunCommand("START CMD /C \\\"ECHO Will Shutdown soon && PAUSE\\\"");
         }
     }
 }

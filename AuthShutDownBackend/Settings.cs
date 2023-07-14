@@ -2,71 +2,19 @@
 {
     public class Settings
     {
-        private const string _githubUrl = "https://github.com/OleAlbers/AutoShutDown";
 
         public long MinBytesReceived { get; set; }
         public string ExecuteCommand { get; set; } = "shutdown";
-        public string ExecuteParameters { get; set; } = "/s /t 30 /c autoshutdown";
+        public string ExecuteParameters { get; set; } = "/s /t 10 /c autoshutdown";
         public string[] LongRunningProcesses { get; set; } = Array.Empty<string>();
         public int MouseMoveMinutes { get; set; }
-        public bool Beep
+        public int WarningSecondsBeforeShutdown { get; set; } = 30;  
+        public bool OnlyBeep
         { get { return ExecuteCommand == "beep"; } }
-        public bool ConsoleLog { get; set; } = true;
-        public bool ShowConsole { get; set; } = false;
 
-        public Settings(string[] args)
-        {
-            if (args.Length == 0) { ShowParameterInfo(); return; }
-            foreach (var arg in args)
-            {
-                if (!arg.Contains('=')) InvalidParameterPair(arg);
-                var pair = arg.Split('=');
-                switch (pair[0])
-                {
-                    case "/showconsole":
-                        ShowConsole = pair[1] == "true";
-                        break;
-                    case "/mouse":
-                        MouseMoveMinutes = Convert.ToInt32(pair[1]);
-                        break;
+        public Settings() { }
 
-                    case "/down":
-                        MinBytesReceived = pair[1].DownloadLimitValue();
-                        break;
-
-                    case "/processes":
-                        LongRunningProcesses = pair[1].Split(',');
-                        break;
-
-                    case "/command":
-                        ExecuteCommand = pair[1];
-                        break;
-
-                    case "/params":
-                        ExecuteParameters = pair[1];
-                        break;
-
-                    case "/log":
-                        ConsoleLog = pair[1] == "true";
-                        break;
-                }
-            }
-
-            Execute.Log($"Autoshutdown started.");
-            Execute.Log($"[Mousemove: {MouseMoveMinutes} minutes | Downloadlimit: {MinBytesReceived.Fancy()} | beep: {Beep} | command:'{ExecuteCommand}' | parameters: '{ExecuteParameters}' | processes:'{string.Join(",", LongRunningProcesses)}']");
-            if (MouseMoveMinutes + MinBytesReceived <= 0) throw new Exception("/mouse or /down must be provided");
-        }
-
-        private void InvalidParameterPair(string arg)
-        {
-            throw new ArgumentException($"expected parameter pair of type 'key=value'. Got '{arg}' instead");
-        }
-
-        private void ShowParameterInfo()
-        {
-            Execute.Log("autoshutdown /mouse=[time] /down=[minspeed] /processes=[process1,process2] /command=[beep|(command)] /params=[parameters]");
-            Execute.Log($"see '{_githubUrl}' for detailed help");
-            Environment.Exit(0);
-        }
+      
+      
     }
 }

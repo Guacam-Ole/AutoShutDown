@@ -1,16 +1,23 @@
-﻿using System.Diagnostics;
+﻿using Serilog;
+
+using System.Diagnostics;
 
 namespace AutoShutDown.Backend
 {
     public static class Execute
     {
+
+        public static void RunCommand(string command)
+        {
+
+
+        }
         public static void RunCommand(Settings settings)
         {
-            Log("All Conditions set");
-            if (settings.Beep)
+            Log.Debug("Running Shutdown-Command");
+            if (settings.OnlyBeep)
             {
                 Console.Beep(3000, 500);
-                if (settings.ConsoleLog) Log("beep");
                 return;
             }
 
@@ -21,11 +28,6 @@ namespace AutoShutDown.Backend
             if (settings.ConsoleLog) Log($"Executed {settings.ExecuteCommand} {settings.ExecuteParameters}");
 #endif
             Environment.Exit(0);
-        }
-
-        public static void Log(string contents)
-        {
-            Console.WriteLine($"[{DateTime.Now}] {contents}");
         }
     }
 }
