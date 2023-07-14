@@ -2,7 +2,7 @@
   "profiles": {
     "AutoShutDown": {
       "commandName": "Project",
-      "commandLineArgs": "/down=1MB /mouse=1 /processes=NordVPN,Azureus /command=notepad /params=Hurra, Hurra, die Schule brennt"
+      "commandLineArgs": "/down=1MB /mouse=1 /processes=NordVPN,Azureus /command=notepad /params=Hurra >>D:\\git\\shut.txt"
     }
   }
 }

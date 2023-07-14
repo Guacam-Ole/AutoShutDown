@@ -10,9 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="this is a dummy.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\AuthShutDownBackend\AuthShutDown.Backend.csproj" />
   </ItemGroup>
 
 </Project>

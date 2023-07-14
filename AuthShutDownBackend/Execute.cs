@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics;
 
-namespace AutoShutDown
+namespace AutoShutDown.Backend
 {
     public static class Execute
     {
         public static void RunCommand(Settings settings)
         {
+            Log("All Conditions set");
             if (settings.Beep)
             {
                 Console.Beep(3000, 500);
@@ -17,7 +18,7 @@ namespace AutoShutDown
             Console.WriteLine($"Would call '{settings.ExecuteCommand} {settings.ExecuteParameters}' on Release");
 #else
             Process.Start(settings.ExecuteCommand, settings.ExecuteParameters);
-            if (settings.ConsoleLog) Log("Executed command, exiting program");
+            if (settings.ConsoleLog) Log($"Executed {settings.ExecuteCommand} {settings.ExecuteParameters}");
 #endif
             Environment.Exit(0);
         }

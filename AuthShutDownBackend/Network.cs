@@ -5,7 +5,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoShutDown
+namespace AutoShutDown.Backend
 {
     public class Network : Trigger
     {
@@ -16,7 +16,8 @@ namespace AutoShutDown
 
         public override void Init()
         {
-            throw new NotImplementedException();
+            Execute.Log("Init Network");
+            StartDownloadTrigger();
         }
 
 

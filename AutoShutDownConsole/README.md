@@ -26,7 +26,7 @@ Configuration is done by StartupParameters:
 
 `autoshutdown /down=2MB /command=beep` - Beep if download falls below 2MB
 
-`autoshutdown /mouse=3 /comand=notepad /params=this is a dummy.txt` - Open 'this is a dummy.txt' with notepad after 3 minutes without mousemovements
+`autoshutdown /mouse=3 /command=notepad /params=this is a dummy.txt` - Open 'this is a dummy.txt' with notepad after 3 minutes without mousemovements
 
 If you combine `/mouse` and `/down` autoshutdown _first_ waits for mousemovements to stop and _after that_ checks if downloads are below the threshold
 

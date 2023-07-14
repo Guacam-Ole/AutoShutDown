@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AutoShutDown
+namespace AutoShutDown.Backend
 {
     public class Mouse : Trigger
     {
@@ -24,26 +19,47 @@ namespace AutoShutDown
 
         public override void Init()
         {
+            Execute.Log("Init Mouse");
             TriggerTimer = new Timer(TimerExpired, null, Settings.MouseMoveMinutes * 30000, Settings.MouseMoveMinutes * 30000);
+            var minuteTimer = new Timer(MinuteTimerExpired, null, TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(10));
+        }
+
+        private void MinuteTimerExpired(object? state)
+        {
+            var currentMousePosition = GetCurrentMousePosition();
+            if (currentMousePosition != _lastMousePosition)
+            {
+                _mouseIdleCount = 0;
+            }
+            if (Settings.ConsoleLog) Execute.Log($"10min Cursor:{currentMousePosition} IdleCount:{_mouseIdleCount}");
         }
 
         public override void TimerExpired(object? state)
         {
-            if (LongRunningProcessesFound()) return;
-            if (!MouseMoved()) return;
+            if (LongRunningProcessesFound())
+            {
+                Execute.Log("Long running process found");
+                return;
+            }
+            if (!MouseStuck())
+            {
+                Execute.Log("Mouse did move");
+                return;
+            }
             TriggerTimer.Change(-1, -1);    // disable timer
 
-            if (Settings.MinBytesReceived>0)
+            Execute.Log("No Mousemovement detected");
+            if (Settings.MinBytesReceived > 0)
             {
                 _network.Init();
-            } else
+            }
+            else
             {
                 Execute.RunCommand(Settings);
             }
         }
 
-
-        private bool MouseMoved()
+        private bool MouseStuck()
         {
             var currentMousePosition = GetCurrentMousePosition();
             _mouseIdleCount = currentMousePosition == _lastMousePosition ? _mouseIdleCount + 1 : 0;
@@ -58,7 +74,5 @@ namespace AutoShutDown
             GetCursorPos(ref currentMousePosition);
             return currentMousePosition;
         }
-
-
     }
 }

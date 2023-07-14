@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoShutDown
+namespace AutoShutDown.Backend
 {
     public abstract class Trigger
     {

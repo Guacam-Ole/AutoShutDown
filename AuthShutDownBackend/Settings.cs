@@ -1,4 +1,4 @@
-﻿namespace AutoShutDown
+﻿namespace AutoShutDown.Backend
 {
     public class Settings
     {
@@ -12,6 +12,7 @@
         public bool Beep
         { get { return ExecuteCommand == "beep"; } }
         public bool ConsoleLog { get; set; } = true;
+        public bool ShowConsole { get; set; } = false;
 
         public Settings(string[] args)
         {
@@ -22,6 +23,9 @@
                 var pair = arg.Split('=');
                 switch (pair[0])
                 {
+                    case "/showconsole":
+                        ShowConsole = pair[1] == "true";
+                        break;
                     case "/mouse":
                         MouseMoveMinutes = Convert.ToInt32(pair[1]);
                         break;
