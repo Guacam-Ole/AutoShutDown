@@ -1,4 +1,4 @@
-﻿using AuthShutDown.Backend;
+﻿using AutoShutDown.Backend;
 
 using AutoShutDown.Backend;
 

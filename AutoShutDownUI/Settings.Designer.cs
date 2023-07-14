@@ -86,6 +86,7 @@
             SelectTasks.TabIndex = 4;
             SelectTasks.Text = "Add";
             SelectTasks.UseVisualStyleBackColor = true;
+            SelectTasks.Click += SelectTasks_Click;
             // 
             // TasksList
             // 

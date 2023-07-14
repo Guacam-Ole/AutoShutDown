@@ -1,10 +1,8 @@
-﻿using AutoShutDown.Backend;
+﻿using System.Diagnostics;
 
-using System.Diagnostics;
-
-namespace AuthShutDown.Backend
+namespace AutoShutDown.Backend
 {
-    public class Processes:Trigger
+    public class Processes : Trigger
     {
         private readonly Settings _settings;
 
@@ -21,10 +19,15 @@ namespace AuthShutDown.Backend
             }
         }
 
+        public static List<string> GetRunningProcesses()
+        {
+            return Process.GetProcesses().Select(q => q.ProcessName).Distinct().ToList();
+        }
+
         public bool LongRunningProcessesFound()
         {
             if (_settings.LongRunningProcesses.Length == 0) return false;
-            return Process.GetProcesses().Any(q => _settings.LongRunningProcesses.Contains(q.ProcessName));
+            return GetRunningProcesses().Any(q => _settings.LongRunningProcesses.Contains(q));
         }
     }
 }

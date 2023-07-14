@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 using Serilog;
 
-namespace AuthShutDown.Backend
+namespace AutoShutDown.Backend
 {
     public class WatchDog
     {

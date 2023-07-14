@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using AutoShutDown.UI;
 
 namespace AutoShutDownUI
 {
@@ -15,6 +7,23 @@ namespace AutoShutDownUI
         public Settings()
         {
             InitializeComponent();
+        }
+
+        private void SelectTasks_Click(object sender, EventArgs e)
+        {
+            var processesForm = new ProcessList();
+            processesForm.ShowDialog();
+            if (processesForm.SelectedProcesses.Count > 0)
+            {
+                foreach (var process in processesForm.SelectedProcesses)
+                {
+                    if (!TasksList.Text.Contains(process))
+                    {
+                        TasksList.Text += " " + process;
+                        TasksList.Text = TasksList.Text.Trim();
+                    }
+                }
+            }
         }
     }
 }
