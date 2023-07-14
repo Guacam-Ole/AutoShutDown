@@ -41,14 +41,14 @@
             SaveButton = new Button();
             Notifyer = new NotifyIcon(components);
             Hint = new ToolTip(components);
-            WarningMinutes = new NumericUpDown();
+            WarningSeconds = new NumericUpDown();
             ShutdownCommand = new TextBox();
             WarningMinutesLabel = new Label();
             label2 = new Label();
             label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)MouseMinuteSelect).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DownloadRate).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)WarningMinutes).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)WarningSeconds).BeginInit();
             SuspendLayout();
             // 
             // TaskLabel
@@ -119,7 +119,6 @@
             // 
             DownloadMultiplyer.DropDownStyle = ComboBoxStyle.DropDownList;
             DownloadMultiplyer.FormattingEnabled = true;
-            DownloadMultiplyer.Items.AddRange(new object[] { "Bytes/s", "KBytes/s", "MBytes/s" });
             DownloadMultiplyer.Location = new Point(240, 69);
             DownloadMultiplyer.Name = "DownloadMultiplyer";
             DownloadMultiplyer.Size = new Size(121, 23);
@@ -142,6 +141,7 @@
             SaveButton.TabIndex = 13;
             SaveButton.Text = "Save";
             SaveButton.UseVisualStyleBackColor = true;
+            SaveButton.Click += SaveButton_Click;
             // 
             // Notifyer
             // 
@@ -150,14 +150,14 @@
             // 
             // WarningMinutes
             // 
-            WarningMinutes.Location = new Point(147, 137);
-            WarningMinutes.Maximum = new decimal(new int[] { 1440, 0, 0, 0 });
-            WarningMinutes.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            WarningMinutes.Name = "WarningMinutes";
-            WarningMinutes.Size = new Size(87, 23);
-            WarningMinutes.TabIndex = 14;
-            Hint.SetToolTip(WarningMinutes, "Show a warning that the system is going to shut down. Set to 0 to disable this");
-            WarningMinutes.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            WarningSeconds.Location = new Point(147, 137);
+            WarningSeconds.Maximum = new decimal(new int[] { 1440, 0, 0, 0 });
+            WarningSeconds.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            WarningSeconds.Name = "WarningMinutes";
+            WarningSeconds.Size = new Size(87, 23);
+            WarningSeconds.TabIndex = 14;
+            Hint.SetToolTip(WarningSeconds, "Show a warning that the system is going to shut down. Set to 0 to disable this");
+            WarningSeconds.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // ShutdownCommand
             // 
@@ -204,7 +204,7 @@
             Controls.Add(ShutdownCommand);
             Controls.Add(label2);
             Controls.Add(WarningMinutesLabel);
-            Controls.Add(WarningMinutes);
+            Controls.Add(WarningSeconds);
             Controls.Add(SaveButton);
             Controls.Add(MinutesLabel);
             Controls.Add(DownloadMultiplyer);
@@ -218,9 +218,10 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "Settings";
             Text = "AutoShutdown-Settings";
+            Load += Settings_Load;
             ((System.ComponentModel.ISupportInitialize)MouseMinuteSelect).EndInit();
             ((System.ComponentModel.ISupportInitialize)DownloadRate).EndInit();
-            ((System.ComponentModel.ISupportInitialize)WarningMinutes).EndInit();
+            ((System.ComponentModel.ISupportInitialize)WarningSeconds).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -240,7 +241,7 @@
         private Button SaveButton;
         private NotifyIcon Notifyer;
         private Label WarningMinutesLabel;
-        private NumericUpDown WarningMinutes;
+        private NumericUpDown WarningSeconds;
         private Label label2;
         private TextBox ShutdownCommand;
         private Label label1;

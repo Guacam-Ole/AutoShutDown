@@ -1,0 +1,9 @@
+{
+  "MinBytesReceived": 0,
+  "ExecuteCommand": "shutdown",
+  "ExecuteParameters": "/s /t 10 /c autoshutdown",
+  "LongRunningProcesses": [],
+  "MouseMoveMinutes": 90,
+  "WarningSecondsBeforeShutdown": 30,
+  "OnlyBeep": false
+}
