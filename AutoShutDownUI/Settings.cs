@@ -30,7 +30,7 @@ namespace AutoShutDown.UI
 
         private void ReadSettings()
         {
-            var settings = JsonConvert.DeserializeObject<AutoShutDown.Backend.Settings>(File.ReadAllText("settings.json")) ?? new AutoShutDown.Backend.Settings();
+            var settings = ConfigReader.ReadSettings() ?? new Backend.Settings();
             MouseMinuteSelect.Value = settings.MouseMoveMinutes;
             WarningSeconds.Value = settings.WarningSecondsBeforeShutdown;
             var multiIndex = 0;
@@ -78,7 +78,7 @@ namespace AutoShutDown.UI
             {
                 settings.LongRunningProcesses = processList;
             }
-            File.WriteAllText("settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
+            ConfigReader.WriteSettings(settings);
         }
 
         private void Settings_Load(object sender, EventArgs e)
@@ -95,6 +95,7 @@ namespace AutoShutDown.UI
         private void SaveButton_Click(object sender, EventArgs e)
         {
             WriteSettings();
+            MessageBox.Show("Please restart to use new settings");
             this.Close();
         }
     }

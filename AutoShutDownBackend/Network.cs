@@ -26,7 +26,7 @@ namespace AutoShutDown.Backend
         {
             long newBytesReceiveTotald = GetReceivedBytesFromAllInterfaces();
             _avgDiffPerSecond = (newBytesReceiveTotald - _bytesReceivedTotal) / 60;
-            Log.Debug($"Avg./s over 60s: {_avgDiffPerSecond.Fancy()}");
+            Log.Debug($"Avg/s over 60s: {_avgDiffPerSecond.Fancy()}");
             _bytesReceivedTotal = newBytesReceiveTotald;
         }
 

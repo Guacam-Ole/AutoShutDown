@@ -9,7 +9,7 @@ namespace AutoShutDown.Backend
     public class WatchDog
     {
         private readonly Settings _settings;
-        private readonly List<Trigger> _triggers = new();
+        public readonly List<Trigger> _triggers = new();
 
         public event EventHandler? WarningEvent;
 
