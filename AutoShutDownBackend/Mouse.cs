@@ -11,6 +11,7 @@ namespace AutoShutDown.Backend
         private static extern bool GetCursorPos(ref Point lpPoint);
 
         private Point _lastMousePosition;
+        private Timer _minuteTimer;
         private DateTime _lastMouseMovement;
         private readonly Settings _settings;
 
@@ -24,7 +25,7 @@ namespace AutoShutDown.Backend
 
         public Mouse(Settings settings)
         {
-            var minuteTimer = new Timer(MinuteTimerExpired, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+            _minuteTimer = new Timer(MinuteTimerExpired, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
             _lastMouseMovement = DateTime.Now;
             _settings = settings;
         }
@@ -46,5 +47,12 @@ namespace AutoShutDown.Backend
             GetCursorPos(ref currentMousePosition);
             return currentMousePosition;
         }
+
+        public override void ShutDown()
+        {
+            _minuteTimer.Dispose();
+            
+        }
+
     }
 }

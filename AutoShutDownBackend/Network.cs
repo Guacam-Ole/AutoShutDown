@@ -7,6 +7,7 @@ namespace AutoShutDown.Backend
     public class Network : Trigger
     {
         private long _bytesReceivedTotal = 0;
+        private readonly Timer _minuteTimer;
         private long _avgDiffPerSecond = long.MaxValue; 
         private readonly Settings _settings;
 
@@ -18,7 +19,7 @@ namespace AutoShutDown.Backend
         public Network(Settings settings)
         {
             _bytesReceivedTotal = GetReceivedBytesFromAllInterfaces();
-            _ = new Timer(MinuteDownloadCount, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+            _minuteTimer = new Timer(MinuteDownloadCount, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
             _settings = settings;
         }
 
@@ -35,6 +36,11 @@ namespace AutoShutDown.Backend
             long bytesReceived = 0;
             foreach (var networkinterface in NetworkInterface.GetAllNetworkInterfaces()) bytesReceived += networkinterface.GetIPStatistics().BytesReceived;
             return bytesReceived;
+        }
+
+        public override void ShutDown()
+        {
+            _minuteTimer.Dispose(); 
         }
     }
 }

@@ -56,6 +56,7 @@ namespace AutoShutDown.UI
         private void Exit(object? sender, EventArgs e)
         {
             _trayIcon.Dispose();
+            Log.Information("Application shut down manually");
             Application.Exit();
         }
 

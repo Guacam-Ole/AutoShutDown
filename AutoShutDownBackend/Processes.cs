@@ -29,5 +29,10 @@ namespace AutoShutDown.Backend
             if (_settings.LongRunningProcesses.Length == 0) return false;
             return GetRunningProcesses().Any(q => _settings.LongRunningProcesses.Contains(q));
         }
+
+        public override void ShutDown()
+        {
+            
+        }
     }
 }

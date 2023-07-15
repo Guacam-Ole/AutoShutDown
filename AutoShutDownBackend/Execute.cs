@@ -6,12 +6,20 @@ namespace AutoShutDown.Backend
 {
     public static class Execute
     {
-
         public static void RunCommand(string command, string parameters)
         {
-            Process.Start(command, parameters);
-            Log.Debug($"Executed {command} {parameters}");
+            if (Debugger.IsAttached)
+            {
+                Log.Debug($"Disabled execution in DebugMode");
+            }
+            else
+            {
+                Process.Start(command, parameters);
+            }
+
+            Log.Information($"Executed {command} {parameters}");
         }
+
         public static void RunCommand(Settings settings)
         {
             Log.Debug("Running Shutdown-Command");
@@ -21,11 +29,7 @@ namespace AutoShutDown.Backend
                 return;
             }
 
-#if DEBUG
-            Console.WriteLine($"Would call '{settings.ExecuteCommand} {settings.ExecuteParameters}' on Release");
-#else
             RunCommand(settings.ExecuteCommand, settings.ExecuteParameters);
-#endif
             Environment.Exit(0);
         }
     }

@@ -1,6 +1,4 @@
-﻿using AutoShutDown.Backend;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 using Serilog;
 
@@ -10,6 +8,7 @@ namespace AutoShutDown.Backend
     {
         private readonly Settings _settings;
         public readonly List<Trigger> _triggers = new();
+        private bool _conditionsMet = false;
 
         public event EventHandler? WarningEvent;
 
@@ -30,21 +29,37 @@ namespace AutoShutDown.Backend
 
         private void ShutdownIfConditionsMet()
         {
-            foreach (var trigger in _triggers)
+            try
             {
-                Log.Debug($"{trigger.GetType().Name}.ConditionsMet: {trigger.ConditionsMet}");
-            }
+                if (_conditionsMet) return;
+                foreach (var trigger in _triggers)
+                {
+                    Log.Debug($"{trigger.GetType().Name}.ConditionsMet: {trigger.ConditionsMet}");
+                }
 
-            if (_triggers.Any(q => !q.ConditionsMet)) return;
-            if (_settings.WarningSecondsBeforeShutdown > 0)
-            {
-                // Todo send Event for warning
-                WarningEvent?.Invoke(this, new EventArgs());
-                var _ = new Timer(ShutDownForReal, null, TimeSpan.Zero, TimeSpan.FromSeconds(_settings.WarningSecondsBeforeShutdown));
+                if (_triggers.Any(q => !q.ConditionsMet)) return;
+                _conditionsMet = true;
+                _triggers.ForEach(q => q.ShutDown());
+                _triggers.Clear();
+                Log.Information("All Conditions met");
+                if (_settings.WarningSecondsBeforeShutdown > 0)
+                {
+                    Log.Debug("Showing Warning");
+                    // Todo send Event for warning
+                    if (WarningEvent != null)
+                    {
+                        Task.Run(() => WarningEvent(this, new EventArgs()));
+                    }
+                    var _ = new Timer(ShutDownForReal, null, TimeSpan.FromSeconds(_settings.WarningSecondsBeforeShutdown), Timeout.InfiniteTimeSpan);
+                }
+                else
+                {
+                    Execute.RunCommand(_settings);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Execute.RunCommand(_settings);
+                Log.Error(ex, "Error on Conditioncheck");
             }
         }
 

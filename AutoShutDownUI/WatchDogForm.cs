@@ -28,7 +28,7 @@ namespace AutoShutDown.UI
 
         private void WatchDog_WarningEvent(object? sender, EventArgs e)
         {
-            MessageBox.Show("Computer will shutdown soon! You can close Autoshutdown through the icon in the system tray to prevent this.", "Autoshutdown");
+            MessageBox .Show(new Form { TopMost = true }, "Computer will shutdown soon! You can close Autoshutdown through the icon in the system tray to prevent this.", "Autoshutdown");
         }
     }
 }
