@@ -27,7 +27,7 @@ namespace AutoShutDown.Backend
         {
             get
             {
-                return $"🐭 {ConditionsMet} | Mouse not moved since {(DateTime.Now-_lastMouseMovement).TotalMinutes:0.##} minutes. Minutes-Config: {_settings.MouseMoveMinutes}";
+                return $"🐭 {ConditionsMet} | Mouse not moved since {(DateTime.Now-_lastMouseMovement).TotalMinutes:0} minutes. Minutes-Config: {_settings.MouseMoveMinutes}";
             }
         }
 
