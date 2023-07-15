@@ -54,6 +54,7 @@
             Controls.Add(StatusLabel);
             FormBorderStyle = FormBorderStyle.None;
             Name = "Overlay";
+            ShowInTaskbar = false;
             Text = "Overlay";
             Load += Overlay_Load;
             ResumeLayout(false);

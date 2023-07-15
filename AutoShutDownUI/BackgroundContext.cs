@@ -52,8 +52,6 @@ namespace AutoShutDown.UI
             _trayIcon.Text = $"Autoshutdown will shut down after {settings.MouseMoveMinutes} minutes if the mouse is not moved and downloads are below {settings.MinBytesReceived.Fancy()}/s ";
             _watchDogForm = new WatchDogForm(settings);
             _watchDogForm.Show();
-            new WatchDogForm(settings).Show();
-            
         }
 
     

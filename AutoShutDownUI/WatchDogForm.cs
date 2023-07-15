@@ -2,12 +2,15 @@
 
 using Serilog;
 
+using Timer = System.Threading.Timer;
+
 namespace AutoShutDown.UI
 {
     public partial class WatchDogForm : Form
     {
         private readonly Backend.Settings _settings;
         private Overlay _overlay;
+        private WatchDog _watchDog;
 
         public WatchDogForm()
         {
@@ -22,12 +25,12 @@ namespace AutoShutDown.UI
 
         private async void WatchDogForm_Load(object sender, EventArgs e)
         {
-            var watchDog = new WatchDog(_settings);
-            watchDog.WarningEvent += WatchDog_WarningEvent;
-            watchDog.UpdateStatusEvent += WatchDog_UpdateStatusEvent;
-            Log.Information("Watchdog started from UI application");
-            await watchDog.RunWatchDog();
+            _watchDog = new WatchDog(_settings);
+            _watchDog.WarningEvent += WatchDog_WarningEvent;
+            _watchDog.UpdateStatusEvent += WatchDog_UpdateStatusEvent;
+            _watchDog.RunWatchDog().Wait();
         }
+
 
         private void WatchDog_UpdateStatusEvent(object? sender, EventArgs e)
         {

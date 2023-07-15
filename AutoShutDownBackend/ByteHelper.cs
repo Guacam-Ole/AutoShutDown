@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AutoShutDown.Backend
+﻿namespace AutoShutDown.Backend
 {
     public static class ByteHelper
     {
         private const string _suffixes = "Bytes,KB,MB,GB";
+
         public static string Fancy(this long value)
         {
             var fancyValue = GetValueFor(value, out string suffix);
@@ -17,11 +12,12 @@ namespace AutoShutDown.Backend
 
         private static long GetValueFor(long value, out string suffix)
         {
-            for (int i = 0; i < _suffixes.Length - 1; i++)
+            var suffixArray = _suffixes.Split(',');
+            for (int i = 0; i < suffixArray.Length - 1; i++)
             {
                 if (value < 1024)
                 {
-                    suffix = _suffixes.Split(',')[i];
+                    suffix = suffixArray[i];
                     return value;
                 }
                 value /= 1024;
@@ -29,7 +25,6 @@ namespace AutoShutDown.Backend
             suffix = "GB";
             return value;
         }
-
 
         public static long DownloadLimitValue(this string argument)
         {

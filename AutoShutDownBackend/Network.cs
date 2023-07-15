@@ -20,7 +20,7 @@ namespace AutoShutDown.Backend
         {
             get
             {
-                return $"🌍 Conditions met: {ConditionsMet} | Current Downloadrate is {_avgDiffPerSecond.Fancy()}. Maximum allowed Download rate is {_settings.MinBytesReceived.Fancy()}";
+                return $"🌍 {ConditionsMet} | Downloadrate is {_avgDiffPerSecond.Fancy()}. Maximum configured: {_settings.MinBytesReceived.Fancy()}";
             }
         }
         public Network(Settings settings)

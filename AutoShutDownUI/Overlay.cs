@@ -23,6 +23,7 @@
             StatusLabel.Invoke((MethodInvoker)delegate
             {
                 StatusLabel.Text = text;
+                Application.DoEvents(); 
             });
         }
 

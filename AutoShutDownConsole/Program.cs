@@ -1,9 +1,5 @@
 ﻿using AutoShutDown.Backend;
 
-using AutoShutDown.Backend;
-
-using Newtonsoft.Json;
-
 using Serilog;
 
 namespace AutoShutDown.Console
@@ -21,12 +17,14 @@ namespace AutoShutDown.Console
                     .CreateLogger();
 
                 var settings = Parser.GetSettingsByArgs(args);
-         
+
                 if (settings == null) return;
                 var watchDog = new WatchDog(settings);
                 watchDog.WarningEvent += WatchDog_WarningEvent;
                 Log.Information("Autoshutdown Console started");
                 watchDog.RunWatchDog().Wait();
+                System.Console.WriteLine("Autoshutdown running. Press any Key to abort");
+                System.Console.ReadKey();
                 Log.Information("Autoshutdown Console stopped");
             }
             catch (Exception ex)

@@ -15,7 +15,7 @@ namespace AutoShutDown.Backend
         {
             get
             {
-                return $"💻 Conditions met: {ConditionsMet} | The following processes may not be present :'{string.Join(',', _settings.LongRunningProcesses)}'";
+                return $"💻 {ConditionsMet} | The following processes may not be present :'{string.Join(',', _settings.LongRunningProcesses)}'";
             }
         }
 

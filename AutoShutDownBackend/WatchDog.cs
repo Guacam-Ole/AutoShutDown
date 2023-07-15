@@ -9,6 +9,7 @@ namespace AutoShutDown.Backend
         private readonly Settings _settings;
         public readonly List<Trigger> Triggers = new();
         private bool _conditionsMet = false;
+        private Timer _minuteTimer;
 
         public event EventHandler? WarningEvent;
 
@@ -25,23 +26,21 @@ namespace AutoShutDown.Backend
         public async Task RunWatchDog()
         {
             Log.Debug($"Watchdog started. Configuration:\n {JsonConvert.SerializeObject(_settings, Formatting.Indented)}");
-            var minuteTimer = new Timer(MinuteTimerElapsed, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
-            while (true) await Task.Delay(1000);
+            _minuteTimer = new Timer(MinuteTimerElapsed, null, TimeSpan.FromSeconds(10), TimeSpan.FromMinutes(1));
         }
 
         private void ShutdownIfConditionsMet()
         {
             try
             {
+                if (UpdateStatusEvent != null)
+                {
+                    Task.Run(() => UpdateStatusEvent(this, new EventArgs()));
+                }
                 if (_conditionsMet) return;
                 foreach (var trigger in Triggers)
                 {
                     Log.Debug($"{trigger.GetType().Name}.ConditionsMet: {trigger.ConditionsMet}");
-                }
-
-                if (UpdateStatusEvent != null)
-                {
-                    Task.Run(() => UpdateStatusEvent(this, new EventArgs()));
                 }
 
                 if (Triggers.Any(q => !q.ConditionsMet)) return;
@@ -77,6 +76,7 @@ namespace AutoShutDown.Backend
 
         private void MinuteTimerElapsed(object? state)
         {
+            Log.Debug("minutetimer alive");
             ShutdownIfConditionsMet();
         }
     }
