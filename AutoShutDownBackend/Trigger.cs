@@ -4,5 +4,6 @@
     {
         public abstract bool ConditionsMet { get;  }
         public abstract void ShutDown();
+        public abstract string Status { get;  }  
     }
 }

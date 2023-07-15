@@ -16,6 +16,13 @@ namespace AutoShutDown.Backend
             get { return _avgDiffPerSecond < _settings.MinBytesReceived; }
         }
 
+        public override string Status
+        {
+            get
+            {
+                return $"🌍 Conditions met: {ConditionsMet} | Current Downloadrate is {_avgDiffPerSecond.Fancy()}. Maximum allowed Download rate is {_settings.MinBytesReceived.Fancy()}";
+            }
+        }
         public Network(Settings settings)
         {
             _bytesReceivedTotal = GetReceivedBytesFromAllInterfaces();

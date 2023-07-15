@@ -11,6 +11,14 @@ namespace AutoShutDown.Backend
             _settings = settings;
         }
 
+        public override string Status
+        {
+            get
+            {
+                return $"💻 Conditions met: {ConditionsMet} | The following processes may not be present :'{string.Join(',', _settings.LongRunningProcesses)}'";
+            }
+        }
+
         public override bool ConditionsMet
         {
             get

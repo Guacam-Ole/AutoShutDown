@@ -4,12 +4,14 @@ using AutoShutDown.UI.Properties;
 
 using System.Diagnostics;
 using Serilog;
+using System.Diagnostics.Contracts;
 
 namespace AutoShutDown.UI
 {
     public class BackgroundContext : ApplicationContext
     {
         private NotifyIcon _trayIcon;
+        private WatchDogForm _watchDogForm;
 
         public BackgroundContext()
         {
@@ -21,11 +23,13 @@ namespace AutoShutDown.UI
                 {
                     Items = {
                         { new ToolStripMenuItem("Change Settings", null, ShowSettings) },
-                        { new ToolStripMenuItem("Show project on Github", null, ShowGithub) },
+                        { new ToolStripMenuItem("Show Status Overlay", null, ShowOverlay) },
+                        { new ToolStripMenuItem("Open project on Github", null, ShowGithub) },
                         { new ToolStripSeparator() },
                         { new ToolStripMenuItem("Exit", null, Exit) },
                     },
-                    ShowImageMargin = true
+                    ShowImageMargin = false,
+                    ShowCheckMargin=true
                 },
                 Text = "Autoshutdown is running",
                 Visible = true
@@ -46,7 +50,8 @@ namespace AutoShutDown.UI
             }
 
             _trayIcon.Text = $"Autoshutdown will shut down after {settings.MouseMoveMinutes} minutes if the mouse is not moved and downloads are below {settings.MinBytesReceived.Fancy()}/s ";
-
+            _watchDogForm = new WatchDogForm(settings);
+            _watchDogForm.Show();
             new WatchDogForm(settings).Show();
             
         }
@@ -68,6 +73,26 @@ namespace AutoShutDown.UI
         private void ShowGithub(object? sender, EventArgs e)
         {
             Process.Start("explorer", "https://github.com/Guacam-Ole/AutoShutDown");
+        }
+
+
+        private void ShowOverlay(object? sender, EventArgs e)
+        {
+            if (sender == null) return;
+            var toolstrip = (ToolStripMenuItem)sender;
+            toolstrip.Checked = !toolstrip.Checked;
+
+            if (_watchDogForm != null)
+            {
+                if (toolstrip.Checked)
+                {
+                    _watchDogForm.EnableOverlay();
+                }
+                else
+                {
+                    _watchDogForm.DisableOverlay();
+                }
+            }
         }
     }
 }

@@ -23,6 +23,14 @@ namespace AutoShutDown.Backend
             }
         }
 
+        public override string Status
+        {
+            get
+            {
+                return $"🐭 Conditions met: {ConditionsMet} | Mouse not moved since {(DateTime.Now-_lastMouseMovement).TotalMinutes:0.##} minutes. Minutes-Config: {_settings.MouseMoveMinutes}";
+            }
+        }
+
         public Mouse(Settings settings)
         {
             _minuteTimer = new Timer(MinuteTimerExpired, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));

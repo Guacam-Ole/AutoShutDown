@@ -7,17 +7,19 @@ namespace AutoShutDown.Backend
     public class WatchDog
     {
         private readonly Settings _settings;
-        public readonly List<Trigger> _triggers = new();
+        public readonly List<Trigger> Triggers = new();
         private bool _conditionsMet = false;
 
         public event EventHandler? WarningEvent;
 
+        public event EventHandler? UpdateStatusEvent;
+
         public WatchDog(Settings settings)
         {
             _settings = settings;
-            if (_settings.MouseMoveMinutes > 0) _triggers.Add(new Mouse(_settings));
-            if (_settings.MinBytesReceived > 0) _triggers.Add(new Network(_settings));
-            if (_settings.LongRunningProcesses.Length > 0) _triggers.Add(new Processes(_settings));
+            if (_settings.MouseMoveMinutes > 0) Triggers.Add(new Mouse(_settings));
+            if (_settings.MinBytesReceived > 0) Triggers.Add(new Network(_settings));
+            if (_settings.LongRunningProcesses.Length > 0) Triggers.Add(new Processes(_settings));
         }
 
         public async Task RunWatchDog()
@@ -32,15 +34,20 @@ namespace AutoShutDown.Backend
             try
             {
                 if (_conditionsMet) return;
-                foreach (var trigger in _triggers)
+                foreach (var trigger in Triggers)
                 {
                     Log.Debug($"{trigger.GetType().Name}.ConditionsMet: {trigger.ConditionsMet}");
                 }
 
-                if (_triggers.Any(q => !q.ConditionsMet)) return;
+                if (UpdateStatusEvent != null)
+                {
+                    Task.Run(() => UpdateStatusEvent(this, new EventArgs()));
+                }
+
+                if (Triggers.Any(q => !q.ConditionsMet)) return;
                 _conditionsMet = true;
-                _triggers.ForEach(q => q.ShutDown());
-                _triggers.Clear();
+                Triggers.ForEach(q => q.ShutDown());
+                Triggers.Clear();
                 Log.Information("All Conditions met");
                 if (_settings.WarningSecondsBeforeShutdown > 0)
                 {
